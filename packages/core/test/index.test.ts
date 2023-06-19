@@ -1,5 +1,5 @@
 import { mount } from '@vue/test-utils'
-import TestComponent from '../src/index.vue'
+import TestComponent from '../src/image.vue'
 import { test, expect } from 'vitest'
 
 test('mount component', () => {
