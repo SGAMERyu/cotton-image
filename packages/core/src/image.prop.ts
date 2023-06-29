@@ -6,6 +6,7 @@ interface RetryOptions {
   acc: string | boolean
 }
 
+
 export const imageProps = {
   width: {
     type: [Number, String] as PropType<number | string>,
@@ -15,6 +16,12 @@ export const imageProps = {
     type: [Number, String] as PropType<number | string>,
     default: '100%'
   },
+  srcSet: {
+    type: String
+  },
+  sizes: {
+    type: String,
+  },
   placeholder: {
     type: String
   },
@@ -23,7 +30,7 @@ export const imageProps = {
   },
   fit: {
     type: String as PropType<CSSProperties['object-fit']>,
-    default: 'contain'
+    default: 'cover'
   },
   alt: {
     type: String,
@@ -35,6 +42,10 @@ export const imageProps = {
   },
   fallbackSrc: {
     type: String
+  },
+  sourceList: {
+    type: Array as PropType<Source[]>,
+    default: () => []
   },
   skeleton: {
     type: [Boolean, Object] as PropType<
