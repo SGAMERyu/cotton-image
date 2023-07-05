@@ -1,11 +1,10 @@
-import type { PropType, CSSProperties, Component } from 'vue'
+import type { PropType, CSSProperties, Component, ExtractPropTypes } from 'vue'
 
 interface RetryOptions {
   count: number
   delay: number
   acc: string | boolean
 }
-
 
 export const imageProps = {
   width: {
@@ -20,10 +19,14 @@ export const imageProps = {
     type: String
   },
   sizes: {
-    type: String,
+    type: String
   },
   placeholder: {
     type: String
+  },
+  widthPlaceholder: {
+    type: Boolean,
+    default: false
   },
   caption: {
     type: String as PropType<string>
@@ -37,20 +40,15 @@ export const imageProps = {
     default: ''
   },
   src: {
-    type: String,
+    type: String as PropType<string | null | undefined>,
     required: true
   },
   fallbackSrc: {
     type: String
   },
-  sourceList: {
-    type: Array as PropType<Source[]>,
-    default: () => []
-  },
   skeleton: {
-    type: [Boolean, Object] as PropType<
-      boolean | { animate: boolean; icon: Component; style: CSSProperties }
-    >
+    type: Boolean,
+    default: false
   },
   lazy: {
     type: Boolean,
@@ -92,3 +90,22 @@ export const imageProps = {
     })
   }
 }
+
+export const imagePlaceholderProps = {
+  placeholderText: {
+    type: String
+  },
+  placeholderNode: {
+    type: Object as PropType<Component>
+  },
+  skeleton: {
+    type: Boolean,
+    default: false
+  }
+}
+
+export type ImageProps = ExtractPropTypes<typeof imageProps>
+export type ImagePlaceholderProps = ExtractPropTypes<
+  typeof imagePlaceholderProps
+>
+export type ImageInstance = InstanceType<typeof Image>

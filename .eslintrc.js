@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-var-requires
 const { defineConfig } = require("eslint-define-config");
 
 module.exports = defineConfig({
@@ -17,6 +18,7 @@ module.exports = defineConfig({
 		"plugin:import/typescript",
 		"plugin:@typescript-eslint/recommended",
 		"plugin:vue/vue3-recommended",
+		"prettier"
 	],
 	ignorePatterns: [
 		"*.d.ts",
