@@ -31,6 +31,10 @@ export const imageProps = {
   caption: {
     type: String as PropType<string>
   },
+  footerPosition: {
+    type: String as PropType<'inner' | 'outer'>,
+    default: 'inner'
+  },
   fit: {
     type: String as PropType<CSSProperties['object-fit']>,
     default: 'cover'
@@ -104,8 +108,22 @@ export const imagePlaceholderProps = {
   }
 }
 
+export const imageCaptionProps = {
+  position: {
+    type: String as PropType<'inner' | 'outer'>,
+    default: 'inner'
+  },
+  captionText: {
+    type: String
+  },
+  captionNode: {
+    type: Object as PropType<Component>
+  }
+}
+
 export type ImageProps = ExtractPropTypes<typeof imageProps>
 export type ImagePlaceholderProps = ExtractPropTypes<
   typeof imagePlaceholderProps
 >
+export type imageCaptionProps = ExtractPropTypes<typeof imageCaptionProps>
 export type ImageInstance = InstanceType<typeof Image>
