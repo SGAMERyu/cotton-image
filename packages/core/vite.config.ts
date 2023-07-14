@@ -10,7 +10,12 @@ export default defineConfig({
     vue(),
     Pinceau(),
     AutoImport({
-      imports: ['vue']
+      imports: ['vue', '@vueuse/core'],
+      eslintrc: {
+        enabled: false,
+        filepath: './.eslintrc-auto-import.json', // Default `./.eslintrc-auto-import.json`
+        globalsPropValue: true // Default `true`, (true | false | 'readonly' | 'readable' | 'writable' | 'writeable')
+      }
     })
   ],
   resolve: {

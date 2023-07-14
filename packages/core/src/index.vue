@@ -1,12 +1,13 @@
 <template>
-  <div class="cotton-image-root">
+  <div ref="imageWrapper" class="cotton-image-root">
     <img
-      v-if="src"
-      :src="src"
+      v-if="shouldLoad"
+      :src="loadSrc"
       :alt="alt"
       :srcset="srcSet"
       :sizes="sizes"
       class="cotton-image"
+      @error="handleError"
     />
     <Placeholder
       v-if="showPlaceholder"
@@ -28,20 +29,58 @@
 import { imageProps } from './image.prop'
 import Placeholder from './placeholder.vue'
 import Caption from './caption.vue'
+import useObserver from '~/composition/useObserver'
+import { noop } from '@vueuse/core'
 
 defineOptions({
   name: 'CottonImage'
 })
 const props = defineProps({ ...imageProps })
+const emits = defineEmits<{
+  error: [event: Event]
+}>()
 const slots = useSlots()
+
+const imageWrapper = ref<null | HTMLElement>(null)
+const [loadFail, setLoadFail] = useToggle(false)
+const [shouldLoad, setShouldLoad] = useToggle(!props.lazy)
 
 const showPlaceholder = computed(() => {
   const { src, widthPlaceholder } = props
-  return !src || widthPlaceholder
+  return !src || widthPlaceholder || !shouldLoad.value
 })
+
 const showCaption = computed(() => {
   const { caption } = props
   return (caption || slots.caption) && !showPlaceholder.value
+})
+
+const loadSrc = computed(() => {
+  if (loadFail.value && props.fallbackSrc) {
+    return props.fallbackSrc
+  }
+  return props.src
+})
+
+function handleError(event: Event) {
+  setLoadFail(true)
+  emits('error', event)
+}
+
+let stopObserver = noop
+
+watchEffect(() => {
+  stopObserver()
+  if (props.lazy) {
+    const { stop } = useObserver(imageWrapper, {
+      ...props.observerOptions,
+      debounce: props.debounce,
+      onInView: () => {
+        setShouldLoad(true)
+      }
+    })
+    stopObserver = stop
+  }
 })
 </script>
 

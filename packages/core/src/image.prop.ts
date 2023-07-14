@@ -44,8 +44,7 @@ export const imageProps = {
     default: ''
   },
   src: {
-    type: String as PropType<string | null | undefined>,
-    required: true
+    type: String as PropType<string | undefined>
   },
   fallbackSrc: {
     type: String
@@ -55,8 +54,7 @@ export const imageProps = {
     default: false
   },
   lazy: {
-    type: Boolean,
-    default: true
+    type: Boolean
   },
   preview: {
     type: Boolean,
@@ -78,9 +76,9 @@ export const imageProps = {
     default: 300
   },
   observerOptions: {
-    type: Object as PropType<IntersectionObserverInit>,
+    type: Object as PropType<Partial<IntersectionObserverInit>>,
     default: () => ({
-      root: window,
+      root: document.documentElement,
       rootMargin: '50px',
       threshold: 0.01
     })

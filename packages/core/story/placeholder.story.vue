@@ -9,23 +9,22 @@
   >
     <div class="demo-block">
       <Test
-        :src="null"
         placeholder="this is placeholder text"
         width="200px"
         height="120px"
       ></Test>
-      <Test :src="null" width="200px" height="120px">
+      <Test width="200px" height="120px">
         <template #placeholder>
           <span>this is placeholder node</span>
         </template>
       </Test>
-      <Test :src="null" width="200px" height="120px" skeleton> </Test>
+      <Test width="200px" height="120px" skeleton> </Test>
     </div>
   </Story>
 </template>
 
 <script setup lang="ts">
-import Test from '../src/image.vue'
+import Test from '../src/index.vue'
 
 defineOptions({
   name: 'CottonStory'
