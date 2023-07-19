@@ -10,7 +10,15 @@
   >
     <div class="demo-block">
       <template v-for="src in imageList" :key="src">
-        <Test :src="src" height="120px" lazy :fallback-src="fallbackSrc"></Test>
+        <Test
+          :src="src"
+          height="120px"
+          lazy
+          :fallback-src="fallbackSrc"
+          :retry="{
+            count: 3
+          }"
+        ></Test>
       </template>
     </div>
   </Story>

@@ -31,19 +31,26 @@ import Placeholder from './placeholder.vue'
 import Caption from './caption.vue'
 import useObserver from '~/composition/useObserver'
 import { noop } from '@vueuse/core'
+import { useImageLoad } from '~/composition/useImageLoad'
 
 defineOptions({
   name: 'CottonImage'
 })
 const props = defineProps({ ...imageProps })
 const emits = defineEmits<{
-  error: [event: Event]
+  error: [event: Event | string]
 }>()
 const slots = useSlots()
 
 const imageWrapper = ref<null | HTMLElement>(null)
 const [loadFail, setLoadFail] = useToggle(false)
 const [shouldLoad, setShouldLoad] = useToggle(!props.lazy)
+const { load } = useImageLoad({
+  decode: props.decode,
+  retryOptions: props.retry,
+  onLoaded: () => setShouldLoad(true),
+  onError: handleError
+})
 
 const showPlaceholder = computed(() => {
   const { src, widthPlaceholder } = props
@@ -62,26 +69,28 @@ const loadSrc = computed(() => {
   return props.src
 })
 
-function handleError(event: Event) {
+function handleError(event: Event | string) {
+  setShouldLoad(true)
   setLoadFail(true)
   emits('error', event)
 }
 
-let stopObserver = noop
-
-watchEffect(() => {
-  stopObserver()
-  if (props.lazy) {
-    const { stop } = useObserver(imageWrapper, {
-      ...props.observerOptions,
-      debounce: props.debounce,
-      onInView: () => {
-        setShouldLoad(true)
-      }
-    })
-    stopObserver = stop
-  }
-})
+if (props.src) {
+  let stopObserver = noop
+  watchEffect(() => {
+    stopObserver()
+    if (props.lazy) {
+      const { stop } = useObserver(imageWrapper, {
+        ...props.observerOptions,
+        debounce: props.debounce,
+        onInView: () => {
+          load(props.src!)
+        }
+      })
+      stopObserver = stop
+    }
+  })
+}
 </script>
 
 <style lang="ts">

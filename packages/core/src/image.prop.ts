@@ -1,10 +1,5 @@
 import type { PropType, CSSProperties, Component, ExtractPropTypes } from 'vue'
-
-interface RetryOptions {
-  count: number
-  delay: number
-  acc: string | boolean
-}
+import type { Retry } from '~/composition/useImageLoad'
 
 export const imageProps = {
   width: {
@@ -67,10 +62,6 @@ export const imageProps = {
     type: Boolean,
     default: true
   },
-  cache: {
-    type: Boolean,
-    default: true
-  },
   debounce: {
     type: Number,
     default: 300
@@ -84,7 +75,7 @@ export const imageProps = {
     })
   },
   retry: {
-    type: Object as PropType<RetryOptions>,
+    type: Object as PropType<Partial<Retry>>,
     default: () => ({
       count: 1,
       delay: 2,
