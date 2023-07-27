@@ -1,6 +1,11 @@
 import type { PropType, CSSProperties, Component, ExtractPropTypes } from 'vue'
 import type { Retry } from '~/composition/useImageLoad'
 
+export enum ToolEnum {
+  ZOOM_IN = 'zoomIn',
+  ZOOM_OUT = 'zoomOut'
+}
+
 export const imageProps = {
   width: {
     type: [Number, String] as PropType<number | string>,
@@ -110,9 +115,16 @@ export const imageCaptionProps = {
   }
 }
 
+export const imagePreviewProps = {
+  src: {
+    type: String
+  }
+}
+
 export type ImageProps = ExtractPropTypes<typeof imageProps>
 export type ImagePlaceholderProps = ExtractPropTypes<
   typeof imagePlaceholderProps
 >
 export type imageCaptionProps = ExtractPropTypes<typeof imageCaptionProps>
+export type ImagePreviewProps = ExtractPropTypes<typeof imagePreviewProps>
 export type ImageInstance = InstanceType<typeof Image>

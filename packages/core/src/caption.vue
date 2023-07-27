@@ -15,7 +15,7 @@ defineOptions({
 defineProps({ ...imageCaptionProps, ...variants })
 </script>
 
-<style lang="ts" setup>
+<style lang="ts">
 css({
     variants: {
         position: {

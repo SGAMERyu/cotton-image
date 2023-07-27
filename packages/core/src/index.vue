@@ -1,14 +1,16 @@
 <template>
   <div ref="imageWrapper" class="cotton-image-root">
-    <img
-      v-if="shouldLoad"
-      :src="loadSrc"
-      :alt="alt"
-      :srcset="srcSet"
-      :sizes="sizes"
-      class="cotton-image"
-      @error="handleError"
-    />
+    <Preview :src="previewSrc">
+      <img
+        v-if="shouldLoad"
+        :src="loadSrc"
+        :alt="alt"
+        :srcset="srcSet"
+        :sizes="sizes"
+        class="cotton-image"
+        @error="handleError"
+      />
+    </Preview>
     <Placeholder
       v-if="showPlaceholder"
       :placeholder-text="placeholder"
@@ -29,6 +31,7 @@
 import { imageProps } from './image.prop'
 import Placeholder from './placeholder.vue'
 import Caption from './caption.vue'
+import Preview from './preview.vue'
 import useObserver from '~/composition/useObserver'
 import { noop } from '@vueuse/core'
 import { useImageLoad } from '~/composition/useImageLoad'
