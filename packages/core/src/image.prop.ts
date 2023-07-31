@@ -121,10 +121,30 @@ export const imagePreviewProps = {
   }
 }
 
+export const imageViewerProps = {
+  visible: {
+    type: Boolean,
+    default: false
+  },
+  src: {
+    type: String,
+    default: ''
+  },
+  zoomDelta: {
+    type: Number,
+    default: 0.15
+  },
+  rotateDelta: {
+    type: Number,
+    default: 15
+  }
+}
+
 export type ImageProps = ExtractPropTypes<typeof imageProps>
 export type ImagePlaceholderProps = ExtractPropTypes<
   typeof imagePlaceholderProps
 >
-export type imageCaptionProps = ExtractPropTypes<typeof imageCaptionProps>
+export type ImageCaptionProps = ExtractPropTypes<typeof imageCaptionProps>
 export type ImagePreviewProps = ExtractPropTypes<typeof imagePreviewProps>
+export type ImageViewerProps = ExtractPropTypes<typeof imageViewerProps>
 export type ImageInstance = InstanceType<typeof Image>

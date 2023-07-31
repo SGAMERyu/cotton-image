@@ -7,7 +7,7 @@ export interface Retry {
 export interface useImageLoadOptions {
   retryOptions: Partial<Retry>
   decode: boolean
-  onLoaded?: (event: Event) => void
+  onLoaded?: (event: Event, image: HTMLImageElement) => void
   onError?: (event: string | Event) => void
 }
 
@@ -21,7 +21,7 @@ export function useImageLoad(options: useImageLoadOptions) {
   const { decode, retryOptions, onError, onLoaded } = options
   let retries = 1
   let image: null | HTMLImageElement = null
-  let timeout: any = null
+  let timeout: NodeJS.Timeout | null = null
   const { count, delay, acc } = Object.assign(
     DEFAULT_RETRY_OPTIONS,
     retryOptions
@@ -37,7 +37,7 @@ export function useImageLoad(options: useImageLoadOptions) {
     }
 
     image.onload = event => {
-      onLoaded?.(event)
+      onLoaded?.(event, image!)
     }
 
     image.onerror = event => {

@@ -2,13 +2,20 @@
   <Teleport to="body">
     <div v-show="visible" class="cotton-image-preview-root" @click="onClose">
       <div class="cotton-image-preview-mask"></div>
-      <div class="cotton-image-preview-warp">
-        <img :src="src" :style="imageStyle" />
+      <div ref="refWarp" class="cotton-image-preview-warp">
+        <img
+          ref="refImage"
+          class="cotton-image-preview-img"
+          :src="src"
+          :style="imageStyle"
+        />
       </div>
       <div class="cotton-image-preview-tools">
-        <ToolAction @click="onActionClick(ToolEnum.ZOOM_IN)">
-          <ZoomInIcon />
-        </ToolAction>
+        <template v-for="item in internalActions" :key="item">
+          <ToolAction @click="item.process">
+            <component :is="item.icon"></component>
+          </ToolAction>
+        </template>
       </div>
     </div>
   </Teleport>
@@ -17,46 +24,64 @@
 <script lang="ts" setup>
 import ToolAction from './toolAction.vue'
 import ZoomInIcon from './actionIcons/zoomInIcon.vue'
-import { ToolEnum } from './image.prop'
+import ZoomOutIcon from './actionIcons/zoomOutIcon.vue'
+import RotateLeftIcon from './actionIcons/rotateLeftIcon.vue'
+import RotateRightIcon from './actionIcons/rotateRightIcon.vue'
+import { imageViewerProps } from './image.prop'
 
 defineOptions({
   name: 'CottonImageViewer'
 })
 
-defineProps({
-  visible: {
-    type: Boolean,
-    default: false
-  },
-  src: {
-    type: String,
-    default: ''
-  }
-})
+const props = defineProps({ ...imageViewerProps })
 
 const emits = defineEmits<{
   'update:visible': [boolean]
 }>()
-const refTransform = ref({
+
+const imageTransform = ref({
   scale: 1,
   rotate: 0,
   x: 0,
   y: 0
 })
+const refImage = ref<HTMLImageElement | null>(null)
+const refWarp = ref<HTMLElement | null>(null)
+
+const internalActions = [
+  {
+    icon: ZoomInIcon,
+    process: () => handleZoom(props.zoomDelta)
+  },
+  {
+    icon: ZoomOutIcon,
+    process: () => handleZoom(-1 * props.zoomDelta)
+  },
+  {
+    icon: RotateLeftIcon,
+    process: () => handleRotate(-1 * props.rotateDelta)
+  },
+  {
+    icon: RotateRightIcon,
+    process: () => handleRotate(props.rotateDelta)
+  }
+]
 
 function onClose() {
   emits('update:visible', false)
 }
 
-function onActionClick(type: ToolEnum) {
-  console.log(type)
+function handleZoom(ratio: number) {
+  imageTransform.value.scale += ratio
+}
+
+function handleRotate(ratio: number) {
+  imageTransform.value.rotate += ratio
 }
 
 const imageStyle = computed(() => {
-  const { scale, rotate, x, y } = refTransform.value
+  const { rotate, x, y, scale } = imageTransform.value
   return {
-    maxWidth: '100%',
-    maxHeight: '100%',
     transform: `scale(${scale}) rotate(${rotate}deg) translate(${x}px, ${y}px)`
   }
 })
@@ -80,17 +105,24 @@ css({
         backgroundColor: 'rgba(0, 0, 0, 0.45)',
     },
     '.cotton-image-preview-warp': {
-        position: 'static',
-        width: '100%',
-        height: '100%',
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        userSelect: 'none',
+    },
+    '.cotton-image-preview-img': {
+      maxWidth: '100%',
+      maxHeight: '70%',
+      userSelect: 'none',
+      transition: 'transform 0.3s cubic-bezier(0.215, 0.61, 0.355, 1) 0s'
     },
     '.cotton-image-preview-tools': {
         position: 'absolute',
-        bottom: '0px',
+        bottom: '24px',
         display: 'flex',
         width: '100%',
         justifyContent: 'center',

@@ -34,7 +34,8 @@ css({
         'svg': {
             width: '1em',
             height: '1em',
-            fill: 'currentColor'
+            fill: 'currentColor',
+            stroke: 'currentColor'
         }
     }
 })

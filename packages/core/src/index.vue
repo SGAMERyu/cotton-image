@@ -51,7 +51,7 @@ const [shouldLoad, setShouldLoad] = useToggle(!props.lazy)
 const { load } = useImageLoad({
   decode: props.decode,
   retryOptions: props.retry,
-  onLoaded: () => setShouldLoad(true),
+  onLoaded: handleLoaded,
   onError: handleError
 })
 
@@ -76,6 +76,10 @@ function handleError(event: Event | string) {
   setShouldLoad(true)
   setLoadFail(true)
   emits('error', event)
+}
+
+function handleLoaded() {
+  setShouldLoad(true)
 }
 
 if (props.src) {
