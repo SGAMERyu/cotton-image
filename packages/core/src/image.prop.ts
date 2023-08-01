@@ -1,9 +1,9 @@
 import type { PropType, CSSProperties, Component, ExtractPropTypes } from 'vue'
 import type { Retry } from '~/composition/useImageLoad'
 
-export enum ToolEnum {
-  ZOOM_IN = 'zoomIn',
-  ZOOM_OUT = 'zoomOut'
+export enum DirectionEnum {
+  VERTICAL = 'vertical',
+  HORIZONTAL = 'horizontal'
 }
 
 export const imageProps = {

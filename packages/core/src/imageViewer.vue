@@ -27,7 +27,11 @@ import ZoomInIcon from './actionIcons/zoomInIcon.vue'
 import ZoomOutIcon from './actionIcons/zoomOutIcon.vue'
 import RotateLeftIcon from './actionIcons/rotateLeftIcon.vue'
 import RotateRightIcon from './actionIcons/rotateRightIcon.vue'
-import { imageViewerProps } from './image.prop'
+import ResetIcon from './actionIcons/resetIcon.vue'
+import FullscreenIcon from './actionIcons/fullscreenIcon.vue'
+import FlipVerticalIcon from './actionIcons/flipVerticalIcon.vue'
+import FlipHorizontalIcon from './actionIcons/flipHorizontalIcon.vue'
+import { DirectionEnum, imageViewerProps } from './image.prop'
 
 defineOptions({
   name: 'CottonImageViewer'
@@ -40,13 +44,16 @@ const emits = defineEmits<{
 }>()
 
 const imageTransform = ref({
-  scale: 1,
+  scaleX: 1,
+  scaleY: 1,
+  scaleZ: 1,
   rotate: 0,
   x: 0,
   y: 0
 })
 const refImage = ref<HTMLImageElement | null>(null)
-const refWarp = ref<HTMLElement | null>(null)
+
+const { toggle: handleFullscreen } = useFullscreen(refImage)
 
 const internalActions = [
   {
@@ -64,6 +71,22 @@ const internalActions = [
   {
     icon: RotateRightIcon,
     process: () => handleRotate(props.rotateDelta)
+  },
+  {
+    icon: ResetIcon,
+    process: () => handleReset()
+  },
+  {
+    icon: FullscreenIcon,
+    process: () => handleFullscreen()
+  },
+  {
+    icon: FlipVerticalIcon,
+    process: () => handleFlip(DirectionEnum.VERTICAL)
+  },
+  {
+    icon: FlipHorizontalIcon,
+    process: () => handleFlip(DirectionEnum.HORIZONTAL)
   }
 ]
 
@@ -72,17 +95,37 @@ function onClose() {
 }
 
 function handleZoom(ratio: number) {
-  imageTransform.value.scale += ratio
+  imageTransform.value.scaleX += ratio
+  imageTransform.value.scaleY += ratio
 }
 
 function handleRotate(ratio: number) {
   imageTransform.value.rotate += ratio
 }
 
+function handleReset() {
+  imageTransform.value = {
+    scaleX: 1,
+    scaleY: 1,
+    scaleZ: 1,
+    rotate: 0,
+    x: 0,
+    y: 0
+  }
+}
+
+function handleFlip(type: DirectionEnum) {
+  if (type === DirectionEnum.HORIZONTAL) {
+    imageTransform.value.scaleX *= -1
+  } else {
+    imageTransform.value.scaleY *= -1
+  }
+}
+
 const imageStyle = computed(() => {
-  const { rotate, x, y, scale } = imageTransform.value
+  const { rotate, x, y, scaleX, scaleY, scaleZ } = imageTransform.value
   return {
-    transform: `scale(${scale}) rotate(${rotate}deg) translate(${x}px, ${y}px)`
+    transform: `scale3d(${scaleX}, ${scaleY}, ${scaleZ}) rotate(${rotate}deg) translate(${x}px, ${y}px)`
   }
 })
 </script>
