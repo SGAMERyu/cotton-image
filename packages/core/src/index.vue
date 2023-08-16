@@ -1,8 +1,7 @@
 <template>
   <div ref="imageWrapper" class="cotton-image-root">
-    <Preview :src="previewSrc">
+    <Preview v-if="shouldLoad && !showPlaceholder" :src="previewSrc">
       <img
-        v-if="shouldLoad"
         :src="loadSrc"
         :alt="alt"
         :srcset="srcSet"

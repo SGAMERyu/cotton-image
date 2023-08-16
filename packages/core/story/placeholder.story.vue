@@ -4,7 +4,7 @@
     :layout="{
       type: 'grid',
       width: '800px',
-      display: 'flex'
+      height: '200pz'
     }"
   >
     <div class="demo-block">

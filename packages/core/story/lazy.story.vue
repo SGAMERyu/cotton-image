@@ -31,7 +31,7 @@ defineOptions({
   name: 'CottonStory'
 })
 
-const imageList = Array(100)
+const imageList = Array(20)
   .fill(0)
   .map((_val, index) => `https://picsum.photos/id/${index + 1}/200/300`)
 
